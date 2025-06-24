@@ -25,7 +25,7 @@ public class RadarHud {
     private static final List<String> SUPPORTED_HELICOPTERS = Arrays.asList(
         "mi24Entity",
         "cobraEntity",
-        "f35Entity",
+        "F35Entity",
         "cobrasharkEntity",
         "mi24ukrEntity", 
         "mi24polEntity"

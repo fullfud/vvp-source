@@ -27,6 +27,7 @@ import tech.vvp.vvp.entity.vehicle.StrykerEntity;
 import tech.vvp.vvp.entity.vehicle.Stryker_1Entity;
 import tech.vvp.vvp.entity.vehicle.Stryker_hakiEntity;
 import tech.vvp.vvp.entity.vehicle.Stryker_1_hakiEntity;
+import tech.vvp.vvp.entity.projectile.AirToAirMissileEntity;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, VVP.MOD_ID);
@@ -111,6 +112,15 @@ public class ModEntities {
                                     .fireImmune()
                                     .sized(3.9f, 3.5f)
                                     .build("stryker_haki"));
+
+    public static final RegistryObject<EntityType<AirToAirMissileEntity>> AIR_TO_AIR_MISSILE = ENTITY_TYPES.register("air_to_air_missile",
+        () -> EntityType.Builder.<AirToAirMissileEntity>of(AirToAirMissileEntity::new, MobCategory.MISC)
+                .sized(0.5f, 0.5f)
+                .setTrackingRange(256)
+                .setUpdateInterval(1)
+                .setCustomClientFactory(AirToAirMissileEntity::new)
+                .fireImmune()
+                .build("air_to_air_missile"));
 
     public static final RegistryObject<EntityType<BikegreenEntity>> BIKEGREEN = ENTITY_TYPES.register("bikegreen",
                         () -> EntityType.Builder.<BikegreenEntity>of(BikegreenEntity::new, MobCategory.MISC)

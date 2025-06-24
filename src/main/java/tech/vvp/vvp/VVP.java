@@ -8,6 +8,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import tech.vvp.vvp.init.*;
+import tech.vvp.vvp.network.ModMessages; // <-- ИМПОРТ ДОБАВЛЕН
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.nbt.CompoundTag;
@@ -26,7 +27,10 @@ public class VVP {
         ModEntities.register(modEventBus);
         ModVehicleItems.register(modEventBus);
         ModSounds.REGISTRY.register(modEventBus);
-        ModTabs.TABS.register(modEventBus);  // Регистрируем вкладки
+        ModTabs.TABS.register(modEventBus);
+
+        // РЕГИСТРАЦИЯ СЕТИ ДОБАВЛЕНА
+        ModMessages.register();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::setup);
