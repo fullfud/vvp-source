@@ -3,7 +3,7 @@ package tech.vvp.vvp.entity.vehicle;
 import com.atsuishio.superbwarfare.Mod;
 import com.atsuishio.superbwarfare.config.server.ExplosionConfig;
 import com.atsuishio.superbwarfare.config.server.VehicleConfig;
-import com.atsuishio.superbwarfare.entity.projectile.AerialBombEntity;
+import com.atsuishio.superbwarfare.entity.OBBEntity;
 import com.atsuishio.superbwarfare.entity.vehicle.base.ContainerMobileVehicleEntity;
 import com.atsuishio.superbwarfare.entity.vehicle.base.LandArmorEntity;
 import com.atsuishio.superbwarfare.entity.vehicle.base.ThirdPersonCameraPosition;
@@ -23,8 +23,10 @@ import com.atsuishio.superbwarfare.network.message.receive.ShakeClientMessage;
 import com.atsuishio.superbwarfare.tools.Ammo;
 import com.atsuishio.superbwarfare.tools.CustomExplosion;
 import com.atsuishio.superbwarfare.tools.InventoryTool;
+import com.atsuishio.superbwarfare.tools.OBB;
 import com.atsuishio.superbwarfare.tools.ParticleTool;
 import com.atsuishio.superbwarfare.tools.SoundTool;
+import com.atsuishio.superbwarfare.tools.VectorTool;
 import com.mojang.math.Axis;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -62,6 +64,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Math;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -74,17 +78,33 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 // import net.minecraftforge.api.distmarker.Dist;
 // import net.minecraftforge.api.distmarker.OnlyIn;
 import tech.vvp.vvp.config.VehicleConfigVVP;
+import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Comparator;
 
 import static com.atsuishio.superbwarfare.tools.ParticleTool.sendParticle;
 
-public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEntity, LandArmorEntity, WeaponVehicleEntity {
+public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEntity, LandArmorEntity, WeaponVehicleEntity, OBBEntity {
 
     public static final EntityDataAccessor<Integer> LOADED_AP = SynchedEntityData.defineId(StrykerEntity.class, EntityDataSerializers.INT);
 
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public OBB obb;
+    public OBB obb1;
+    public OBB obb2;
+    public OBB obb3;
+    public OBB obb4;
+    public OBB obb5;
+    public OBB obb6;
+    public OBB obb7;
+    public OBB obb8;
+    public OBB obb9;
+    public OBB obb10;
+    public OBB obb11;
+    public OBB obb12;
+    public OBB obbTurret;
 
     public StrykerEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(ModEntities.STRYKER.get() , world);
@@ -93,6 +113,19 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
     public StrykerEntity(EntityType<StrykerEntity> type, Level world) {
         super(type, world);
         this.setMaxUpStep(1.5f);
+        this.obb = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_RIGHT);
+        this.obb2 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_LEFT);
+        this.obb3 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_LEFT);
+        this.obb4 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_RIGHT);
+        this.obb9 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_LEFT);
+        this.obb10 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_LEFT);
+        this.obb11 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_RIGHT);
+        this.obb12 = new OBB(this.position().toVector3f(), new Vector3f(0.2f, 0.45f, 0.45f), new Quaternionf(), OBB.Part.WHEEL_RIGHT);
+        this.obb5 = new OBB(this.position().toVector3f(), new Vector3f(1.625f, 0.90625f, 2.4375f), new Quaternionf(), OBB.Part.BODY);
+        this.obb6 = new OBB(this.position().toVector3f(), new Vector3f(1.625f, 0.53125f, 0.34375f), new Quaternionf(), OBB.Part.BODY);
+        this.obb7 = new OBB(this.position().toVector3f(), new Vector3f(1.625f, 0.625f, 1.5f), new Quaternionf(), OBB.Part.BODY);
+        this.obb8 = new OBB(this.position().toVector3f(), new Vector3f(0.71875f, 0.46875f, 0.875f), new Quaternionf(), OBB.Part.ENGINE1);
+        this.obbTurret = new OBB(this.position().toVector3f(), new Vector3f(0.875f, 0.46f, 1.25f), new Quaternionf(), OBB.Part.TURRET);
         
     }
     
@@ -190,13 +223,7 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
     @Override
     public DamageModifier getDamageModifier() {
         return super.getDamageModifier()
-                .custom((source, damage) -> getSourceAngle(source, 0.25f) * damage)
-                .custom((source, damage) -> {
-                    if (source.getDirectEntity() instanceof AerialBombEntity) {
-                        return 3f * damage;
-                    }
-                    return damage;
-                });
+                .custom((source, damage) -> getSourceAngle(source, 0.25f) * damage);
     }
 
     @Override
@@ -208,6 +235,7 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
         rightWheelRotO = this.getRightWheelRot();
 
         super.baseTick();
+        updateOBB();
 
         if (this.level() instanceof ServerLevel) {
             this.handleAmmo();
@@ -516,7 +544,7 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
         Matrix4f transformV = getVehicleTransform(ticks);
 
         Matrix4f transform = new Matrix4f();
-        Vector4f worldPosition = transformPosition(transform, 0, 2.4003f, 0);
+        Vector4f worldPosition = transformPosition(transform, 0, 3.5f, 0);
 
         transformV.translate(worldPosition.x, worldPosition.y, worldPosition.z);
         transformV.rotate(Axis.YP.rotationDegrees(Mth.lerp(ticks, turretYRotO, getTurretYRot())));
@@ -649,7 +677,7 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
 
     @Override
     public ResourceLocation getVehicleIcon() {
-        return VVP.loc("textures/vehicle_icon/stryker_haki_icon.png");
+        return VVP.loc("textures/vehicle_icon/stryker_icon.png");
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -730,5 +758,67 @@ public class StrykerEntity extends ContainerMobileVehicleEntity implements GeoEn
     @Override
     public @Nullable ResourceLocation getVehicleItemIcon() {
         return Mod.loc("textures/gui/vehicle/type/land.png");
+    }
+
+    public List<OBB> getOBBs() {
+        return List.of(this.obb, this.obb2, this.obb3, this.obb4, this.obb5, this.obb6, this.obb7, this.obb8, this.obb9, this.obb10, this.obb11, this.obb12, this.obbTurret);
+    }
+
+    // @Override
+    public void updateOBB() {
+        Matrix4f transform = getVehicleTransform(1);
+
+        Vector4f worldPosition = transformPosition(transform, -1.37f, 0.50f, 2.58f);
+        this.obb.center().set(new Vector3f(worldPosition.x, worldPosition.y, worldPosition.z));
+        this.obb.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition2 = transformPosition(transform, 1.37f, 0.50f, 2.58f);
+        this.obb2.center().set(new Vector3f(worldPosition2.x, worldPosition2.y, worldPosition2.z));
+        this.obb2.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition9 = transformPosition(transform, 1.37f, 0.50f, 1.20f);
+        this.obb9.center().set(new Vector3f(worldPosition9.x, worldPosition9.y, worldPosition9.z));
+        this.obb9.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition10 = transformPosition(transform, 1.37f, 0.50f, -0.45f);
+        this.obb10.center().set(new Vector3f(worldPosition10.x, worldPosition10.y, worldPosition10.z));
+        this.obb10.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition11 = transformPosition(transform, -1.37f, 0.50f, 1.20f);
+        this.obb11.center().set(new Vector3f(worldPosition11.x, worldPosition11.y, worldPosition11.z));
+        this.obb11.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition12 = transformPosition(transform, -1.37f, 0.50f, -0.45f);
+        this.obb12.center().set(new Vector3f(worldPosition12.x, worldPosition12.y, worldPosition12.z));
+        this.obb12.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition3 = transformPosition(transform, 1.37f, 0.50f, -2.05f);
+        this.obb3.center().set(new Vector3f(worldPosition3.x, worldPosition3.y, worldPosition3.z));
+        this.obb3.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition4 = transformPosition(transform, -1.37f, 0.50f, -2.05f);
+        this.obb4.center().set(new Vector3f(worldPosition4.x, worldPosition4.y, worldPosition4.z));
+        this.obb4.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition5 = transformPosition(transform, 0, 1.53125f, -0.4375f);
+        this.obb5.center().set(new Vector3f(worldPosition5.x, worldPosition5.y, worldPosition5.z));
+        this.obb5.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition6 = transformPosition(transform, 0, 1.90625f, -3.21875f);
+        this.obb6.center().set(new Vector3f(worldPosition6.x, worldPosition6.y, worldPosition6.z));
+        this.obb6.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition7 = transformPosition(transform, 0, 1.8f, 2.53125f);
+        this.obb7.center().set(new Vector3f(worldPosition7.x, worldPosition7.y, worldPosition7.z));
+        this.obb7.setRotation(VectorTool.combineRotations(1, this));
+
+        Vector4f worldPosition8 = transformPosition(transform, 0.65625f, 2.03125f, -2.0625f);
+        this.obb8.center().set(new Vector3f(worldPosition8.x, worldPosition8.y, worldPosition8.z));
+        this.obb8.setRotation(VectorTool.combineRotations(1, this));
+
+        Matrix4f transformT = getTurretTransform(1);
+        Vector4f worldPositionT = transformPosition(transformT, 0, -0.25f, -1.25f);
+        this.obbTurret.center().set(new Vector3f(worldPositionT.x, worldPositionT.y, worldPositionT.z));
+        this.obbTurret.setRotation(VectorTool.combineRotationsTurret(1, this));
     }
 }

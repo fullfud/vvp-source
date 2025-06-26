@@ -6,6 +6,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.NetworkDirection;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import tech.vvp.vvp.init.*;
 import tech.vvp.vvp.network.ModMessages; // <-- ИМПОРТ ДОБАВЛЕН
@@ -14,6 +17,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import tech.vvp.vvp.network.message.S2CRadarSyncPacket;
 
 @Mod(VVP.MOD_ID)
 public class VVP {
@@ -46,6 +50,7 @@ public class VVP {
             LOGGER.info("HELLO FROM COMMON SETUP");
             LOGGER.info("DIRT BLOCK >> {}", net.minecraft.world.level.block.Blocks.DIRT);
         });
+        com.atsuishio.superbwarfare.Mod.addNetworkMessage(S2CRadarSyncPacket.class, S2CRadarSyncPacket::buffer, S2CRadarSyncPacket::new, S2CRadarSyncPacket::handler, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     private void onItemTooltip(ItemTooltipEvent event) {

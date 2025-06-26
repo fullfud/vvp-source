@@ -10,6 +10,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import tech.vvp.vvp.VVP;
 import tech.vvp.vvp.entity.vehicle.Mi24Entity;
+import tech.vvp.vvp.entity.vehicle.CobrasharkEntity;
+import tech.vvp.vvp.entity.vehicle.F35Entity;
+import tech.vvp.vvp.entity.vehicle.Mi24ukrEntity;
+import tech.vvp.vvp.entity.vehicle.Mi24polEntity;
+import tech.vvp.vvp.entity.vehicle.CobraEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
@@ -23,17 +28,17 @@ public class RadarHud {
     private static final ResourceLocation RADAR_SWEEP = new ResourceLocation(VVP.MOD_ID, "textures/gui/radar_sweep.png"); // Текстура 1x47
     
     private static final List<String> SUPPORTED_HELICOPTERS = Arrays.asList(
-        "mi24Entity",
-        "cobraEntity",
+        "Mi24Entity",
+        "СobraEntity",
         "F35Entity",
-        "cobrasharkEntity",
-        "mi24ukrEntity", 
-        "mi24polEntity"
+        "CobrasharkEntity",
+        "Mi24ukrEntity", 
+        "Mi24polEntity"
     );
     
     // Переменные для эффекта сканирования
     private static float sweepAngle = 0.0f;
-    private static final float SWEEP_SPEED = 1.0f; // Увеличенная скорость вращения развертки
+    private static final float SWEEP_SPEED = 1.3f; // Увеличенная скорость вращения развертки
     private static final int TRAIL_LENGTH = 3; // Только 3 сегмента шлейфа
     
     // Карта для отслеживания времени обнаружения целей

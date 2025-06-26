@@ -69,6 +69,6 @@ side = "BOTH"
 [[dependencies.vvp]]
 modId = "superbwarfare"
 mandatory = true
-versionRange = "[0.8.2]"
+versionRange = "[0.8.3]"
 ordering = "AFTER"
 side = "BOTH"
